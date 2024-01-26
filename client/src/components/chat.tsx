@@ -13,12 +13,14 @@ const Chat = () => {
   };
 
   return (
-    <div>
+    <div className="flex items-end max-h-[600px] border rounded-md h-screen w-96">
       {/* Display the messages */}
-      {messages.map((message, index) => (
-        <p key={index}>{message}</p>
-      ))}
-      <form onSubmit={handleSubmit}>
+      <div>
+        {messages.map((message: string, index: number) => (
+          <p key={index}>{message}</p>
+        ))}
+      </div>
+      <form onSubmit={handleSubmit} className="p-4 w-full">
         {/* Input field for sending new messages */}
         <Input
           type="text"

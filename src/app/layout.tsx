@@ -18,7 +18,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-background dark:background`}>
+      <body
+        className={`${inter.className} bg-background dark:background`}
+        suppressHydrationWarning={true}
+      >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <ThemeSwitcher />
           <main className="h-screen">{children}</main>

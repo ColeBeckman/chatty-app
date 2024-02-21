@@ -15,11 +15,7 @@ const Bubble = (props: Props) => {
   const fallback = name?.charAt(0);
 
   return (
-<<<<<<< Updated upstream
-    <li className="flex break-words items-start gap-2.5">
-=======
     <li dir="rtl" className="flex items-start gap-2.5 first:mt-auto">
->>>>>>> Stashed changes
       <Avatar>
         <AvatarImage src={userImage} />
         <AvatarFallback>{fallback}</AvatarFallback>
@@ -29,7 +25,7 @@ const Bubble = (props: Props) => {
           <span className="text-sm font-normal mr-[5px]">{userName}</span>
           <span className="text-xs font-thin">{timestamp}</span>
         </div>
-        <p className="text-sm font-light py-2.5  break-words">{message}</p>
+        <p className="text-sm font-light py-2.5 break-all">{message}</p>
       </div>
     </li>
   );

@@ -18,27 +18,26 @@ const io = new Server(httpServer, {
 });
 io.on('connection', async (socket) => {
   console.log(`${socket.id} connected`);
-  try {
-    const decoded = jwt.verify(socket.handshake.query.token, publicKey);
-    const user = await clerkClient.users.getUser(decoded.sub);
-    socket.user = user;
-    console.log('full user obj', user);
-  } catch (err) {
-    console.log(`${err}, Unauthorized user`);
-  }
 
-  if (socket.userId) {
-    socket.on('message', (newMessage) => {
-      io.emit('newMessage', newMessage);
-      console.log(newMessage);
-      db('messages').insert({
-        user_name: user.firstName,
-        user_image: user.imageUrl,
-        userId: socket.userId,
-        message: newMessage,
-      });
+  socket.on('authenticate', async (token) => {
+    try {
+      const decoded = jwt.verify(token, publicKey);
+      const user = await clerkClient.users.getUser(decoded.sub);
+      socket.user = user;
+    } catch (err) {
+      console.log(`${err}, Unauthorized user`);
+    }
+  });
+
+  socket.on('message', async (newMessage) => {
+    io.emit('newMessage', newMessage);
+    await db('messages').insert({
+      user_name: socket.user.firstName,
+      user_image: socket.user.imageUrl,
+      user_id: socket.user.id,
+      message: newMessage,
     });
-  }
+  });
 
   socket.on('disconnect', () => {
     console.log(`${socket.id} disconnected`);

@@ -9,7 +9,7 @@ exports.up = function (knex) {
     table.text('message');
     table.string('user_id');
     table.string('user_image');
-    table.timestamps();
+    table.timestamps(true, true);
   });
 };
 

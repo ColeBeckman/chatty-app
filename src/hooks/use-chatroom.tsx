@@ -11,21 +11,20 @@ function useChatroom() {
   const { getToken } = useAuth();
 
   useEffect(() => {
-    const connectToSocket = async () => {
+    const authenticateUser = async () => {
       const token = await getToken();
-      const socket = io(process.env.NEXT_PUBLIC_SERVER_URL!, {
-        query: { token },
-      });
-      setSocketConnection(socket);
-      socket.on('newMessage', (message) => {
-        setMessages((prevMessages) => [...prevMessages, message]);
-      });
+      socket.emit('authenticate', token);
     };
-    connectToSocket();
-    // return () => {
-    //   socket.disconnect();
-    // };
-  }, []);
+    const socket = io(process.env.NEXT_PUBLIC_SERVER_URL!);
+    setSocketConnection(socket);
+    socket.on('newMessage', (message) => {
+      setMessages((prevMessages) => [...prevMessages, message]);
+    });
+    authenticateUser();
+    return () => {
+      socket?.disconnect();
+    };
+  }, [getToken]);
 
   const sendMessage = () => {
     socketConnection?.emit('message', currentMessage);

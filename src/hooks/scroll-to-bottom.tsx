@@ -1,6 +1,6 @@
 import React from 'react';
 
-function scrollToBottom<T>(
+function useScrollToBottom<T>(
   dep: T,
 ): React.MutableRefObject<HTMLUListElement | null> {
   const ref = React.useRef<HTMLUListElement | null>(null);
@@ -12,4 +12,4 @@ function scrollToBottom<T>(
   return ref;
 }
 
-export default scrollToBottom;
+export default useScrollToBottom;

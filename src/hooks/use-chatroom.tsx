@@ -2,12 +2,20 @@ import { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useAuth } from '@clerk/nextjs';
 
-type Message = string;
+type Message = {
+  id: number;
+  message: string;
+  user_id: string;
+  user_name: string;
+  user_image: string;
+  created_at: Date;
+  updated_at: Date;
+};
 
-function useChatroom() {
+function useChatroom(defaultMessages: []) {
   const [socketConnection, setSocketConnection] = useState<Socket>();
   const [currentMessage, setCurrentMessage] = useState('');
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>(defaultMessages);
   const { getToken } = useAuth();
 
   useEffect(() => {

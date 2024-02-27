@@ -30,13 +30,14 @@ io.on('connection', async (socket) => {
   });
 
   socket.on('message', async (newMessage) => {
-    io.emit('newMessage', newMessage);
-    await db('messages').insert({
+    const [message] = await db('messages').returning('*').insert({
       user_name: socket.user.firstName,
       user_image: socket.user.imageUrl,
       user_id: socket.user.id,
       message: newMessage,
     });
+    console.log('new message', message);
+    io.emit('newMessage', message);
   });
 
   socket.on('disconnect', () => {

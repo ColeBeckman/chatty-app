@@ -30,6 +30,8 @@ io.on('connection', async (socket) => {
   });
 
   socket.on('message', async (newMessage) => {
+    console.log('🚀 ~ socket.on ~ newMessage:', newMessage);
+
     const [message] = await db('messages').returning('*').insert({
       user_name: socket.user.firstName,
       user_image: socket.user.imageUrl,

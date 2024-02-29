@@ -32,7 +32,7 @@ io.on('connection', async (socket) => {
   });
 
   socket.on('join', (roomName) => {
-    db('chat_rooms').get();
+    socket.join(roomName);
   });
 
   socket.on('message', async (newMessage) => {

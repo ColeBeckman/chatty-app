@@ -12,11 +12,20 @@ type Message = {
   updated_at: Date;
 };
 
-function useChatroom(defaultMessages: []) {
+function useChatroom(defaultMessages: [], roomName: string) {
   const [socketConnection, setSocketConnection] = useState<Socket>();
   const [currentMessage, setCurrentMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>(defaultMessages);
   const { getToken } = useAuth();
+
+  useEffect(() => {
+    if (socketConnection) {
+      socketConnection.emit('join', roomName);
+    }
+    return () => {
+      console.log('Leaving');
+    };
+  }, [roomName, socketConnection]);
 
   useEffect(() => {
     const authenticateUser = async () => {

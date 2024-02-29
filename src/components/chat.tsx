@@ -1,4 +1,5 @@
 'use client';
+import { usePathname } from 'next/navigation';
 import useChatroom from '@/hooks/use-chatroom';
 import useScrollToBottom from '@/hooks/scroll-to-bottom';
 
@@ -11,8 +12,10 @@ interface Props {
 }
 const Chat = (props: Props) => {
   const { serverMessages, userId } = props;
+  const pathName = usePathname();
+  const roomName = pathName.split('/')[1];
   const { messages, sendMessage, currentMessage, setCurrentMessage } =
-    useChatroom(serverMessages);
+    useChatroom(serverMessages, roomName);
   const ulRef = useScrollToBottom(messages);
 
   return (

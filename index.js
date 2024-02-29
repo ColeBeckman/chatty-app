@@ -6,6 +6,7 @@ const clerkClient = require('@clerk/clerk-sdk-node');
 
 const jwt = require('jsonwebtoken');
 const db = require('./db/db');
+const { dv } = require('@faker-js/faker');
 
 const app = express();
 const httpServer = createServer(app);
@@ -16,6 +17,7 @@ const io = new Server(httpServer, {
     origin: '*',
   },
 });
+
 io.on('connection', async (socket) => {
   console.log(`${socket.id} connected`);
 
@@ -27,6 +29,10 @@ io.on('connection', async (socket) => {
     } catch (err) {
       console.log(`${err}, Unauthorized user`);
     }
+  });
+
+  socket.on('join', (roomName) => {
+    db('chat_rooms').get();
   });
 
   socket.on('message', async (newMessage) => {

@@ -16,6 +16,7 @@ const io = new Server(httpServer, {
     origin: '*',
   },
 });
+
 io.on('connection', async (socket) => {
   console.log(`${socket.id} connected`);
 
@@ -29,17 +30,40 @@ io.on('connection', async (socket) => {
     }
   });
 
-  socket.on('message', async (newMessage) => {
-    console.log('🚀 ~ socket.on ~ newMessage:', newMessage);
+  socket.on('join', (roomName) => {
+    socket.join(roomName);
+    socket.currentRoomName = roomName;
+    console.log('joining', roomName);
+  });
 
+  socket.on('leave', (roomName) => {
+    socket.leave(roomName);
+    socket.currentRoomName = null;
+    console.log('leaving', roomName);
+  });
+
+  socket.on('message', async (newMessage) => {
+    if (!socket.currentRoomName) {
+      return;
+    }
+
+    const chatRoom = await db('chat_rooms')
+      .where({
+        room_name: socket.currentRoomName,
+      })
+      .first();
+    if (!chatRoom) {
+      return;
+    }
     const [message] = await db('messages').returning('*').insert({
       user_name: socket.user.firstName,
       user_image: socket.user.imageUrl,
       user_id: socket.user.id,
       message: newMessage,
+      chat_room_id: chatRoom.id,
     });
     console.log('new message', message);
-    io.emit('newMessage', message);
+    io.in(socket.currentRoomName).emit('newMessage', message);
   });
 
   socket.on('disconnect', () => {

@@ -12,36 +12,45 @@ type Message = {
   updated_at: Date;
 };
 
-function useChatroom(defaultMessages: []) {
-  const [socketConnection, setSocketConnection] = useState<Socket>();
+let socket: Socket;
+
+function useChatroom(defaultMessages: [], roomName: string) {
   const [currentMessage, setCurrentMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>(defaultMessages);
   const { getToken } = useAuth();
 
   useEffect(() => {
+    if (!socket) {
+      socket = io(process.env.NEXT_PUBLIC_SERVER_URL!);
+    }
+
+    if (socket) {
+      socket.on('newMessage', (message) => {
+        console.log(message, 'message');
+        setMessages((prevMessages) => [...prevMessages, message]);
+      });
+    }
+
     const authenticateUser = async () => {
       const token = await getToken();
       socket.emit('authenticate', token);
     };
-    const socket = io(process.env.NEXT_PUBLIC_SERVER_URL!);
-    setSocketConnection(socket);
-    socket.on('newMessage', (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
-    });
     authenticateUser();
+
+    socket.emit('join', roomName);
+
     return () => {
-      socket?.disconnect();
+      socket.emit('leave', roomName);
     };
-  }, [getToken]);
+  }, [getToken, roomName]);
 
   const sendMessage = () => {
-    socketConnection?.emit('message', currentMessage);
+    socket.emit('message', currentMessage);
     setCurrentMessage('');
   };
 
   return {
     messages,
-    socketConnection,
     sendMessage,
     currentMessage,
     setCurrentMessage,

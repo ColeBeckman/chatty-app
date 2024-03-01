@@ -9,7 +9,7 @@ const getRooms = () => {
 const ChatRooms = async () => {
   const rooms = await getRooms();
   return (
-    <ul>
+    <ul className="flex flex-col gap-1 w-full pl-3 mt-2.5">
       {rooms.map((room: ChatRoomType) => {
         return <ChatRoom key={room.id} room={room} />;
       })}

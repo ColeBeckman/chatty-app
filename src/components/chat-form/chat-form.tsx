@@ -16,7 +16,7 @@ const ChatForm = (props: Props) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex gap-2 flex-col p-4 w-full border-t rounded-lg max-height-[115px]"
+      className="flex gap-2 flex-col p-4 w-full max-height-[115px] bg-background-darker"
     >
       <Input
         type="text"

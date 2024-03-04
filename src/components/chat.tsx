@@ -17,12 +17,11 @@ const Chat = (props: Props) => {
   const { messages, sendMessage, currentMessage, setCurrentMessage } =
     useChatroom(serverMessages, roomName);
   const ulRef = useScrollToBottom(messages);
-
   return (
     <div className="flex w-full">
       <div className="flex flex-col justify-end items-start h-screen w-full">
         <ul
-          className="flex flex-col h-full gap-2.5 w-full p-2 overflow-y-auto"
+          className="flex flex-col-reverse h-full gap-2.5 w-full p-2 overflow-y-auto"
           ref={ulRef}
         >
           {messages.map((message) => (

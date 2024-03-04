@@ -1,16 +1,23 @@
 import { ChatRoomType } from '@/types';
 import Link from 'next/link';
-import { LuDoorOpen, LuDoorClosed } from 'react-icons/lu';
+import classNames from 'classnames';
 
 interface Props {
   room: ChatRoomType;
+  currentRoomName: string;
 }
+
 const ChatRoom = (props: Props) => {
-  const { room } = props;
+  const { room, currentRoomName } = props;
+
+  const isActiveRoom = currentRoomName === room.room_name;
+  const style = classNames('ml-1 hover:text-accent', {
+    'text-accent': isActiveRoom,
+  });
+
   return (
-    <li className="flex text-lg justify-center items-center">
-      <LuDoorClosed className="ml-1" />
-      <Link className="ml-1" href={`/${room.room_name}`}>
+    <li className="flex text-lg items-center ">
+      <Link className={style} href={`/${room.room_name}`}>
         {room.room_name}
       </Link>
     </li>

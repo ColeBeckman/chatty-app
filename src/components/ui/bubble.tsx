@@ -1,13 +1,15 @@
 'use client';
+
 import React from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from './avatar';
+import Image from 'next/image';
+
 const classNames = require('classnames');
 
 interface Props {
   message: string;
   name?: string | null;
   timestamp: Date;
-  userImage?: string;
+  userImage: string;
   userName?: string | null;
   currentUserId: string;
   messageUserId: string;
@@ -23,10 +25,8 @@ const Bubble = (props: Props) => {
     messageUserId,
   } = props;
   const date = new Date(timestamp);
-  const fallback = name?.charAt(0);
-
   const isRtl = currentUserId === messageUserId;
-  const style = classNames('flex items-start gap-2.5 first:mt-auto', {
+  const style = classNames('flex items-start gap-2.5', {
     'ml-auto flex-row-reverse ': isRtl,
   });
   const bubbleStyle = classNames(
@@ -38,10 +38,9 @@ const Bubble = (props: Props) => {
   );
   return (
     <li className={style}>
-      <Avatar>
-        <AvatarImage src={userImage} />
-        <AvatarFallback>{fallback}</AvatarFallback>
-      </Avatar>
+      <div className="relative rounded-full w-[40px] h-[40px] overflow-hidden">
+        <Image fill src={userImage} alt={`${userName}'s profile picture`} />
+      </div>
       <div className={bubbleStyle}>
         <div className="items-center space-x-2 rtl:space-x-reverse">
           <span className="text-sm font-normal mr-[5px]">{userName}</span>

@@ -62,7 +62,6 @@ io.on('connection', async (socket) => {
       message: newMessage,
       chat_room_id: chatRoom.id,
     });
-    console.log('new message', message);
     io.in(socket.currentRoomName).emit('newMessage', message);
   });
 

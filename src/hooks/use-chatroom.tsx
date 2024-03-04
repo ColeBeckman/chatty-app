@@ -26,7 +26,6 @@ function useChatroom(defaultMessages: [], roomName: string) {
 
     if (socket) {
       socket.on('newMessage', (message) => {
-        console.log(message, 'message');
         setMessages((prevMessages) => [...prevMessages, message]);
       });
     }

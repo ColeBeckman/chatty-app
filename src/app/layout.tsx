@@ -25,7 +25,6 @@ export default function RootLayout({
           suppressHydrationWarning={true}
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <ThemeSwitcher />
             <main className="h-screen">{children}</main>
           </ThemeProvider>
         </body>

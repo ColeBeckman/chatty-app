@@ -1,10 +1,13 @@
 import db from '@db';
+
 import { currentUser } from '@clerk/nextjs';
 import { User } from '@clerk/nextjs/server';
+import { UserButton } from '@clerk/nextjs';
+
 import Chat from '@/components/chat';
-import NavBar from '@/components/nav-bar';
 import ChatRooms from '@/components/chat-rooms/chat-rooms';
 import { IoChatbubblesOutline } from 'react-icons/io5';
+import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 
 const getMessages = (roomName: string) => {
   return db
@@ -22,14 +25,17 @@ export default async function Home(props: Props) {
   const user: User = (await currentUser()) as User;
   const messages = await getMessages(params.roomName);
   return (
-    <div className="flex justify-center h-screen items-center">
-      <NavBar />
-      <div className="flex flex-col items-center max-w-[180px] w-full max-h-[700px] h-full bg-background-darker">
-        <h3 className="flex gap-1 items-center font-bold justify-center pb-2.5 w-full border-b mt-2.5">
+    <div className="flex h-screen items-center">
+      <div className="flex flex-col items-center max-w-[180px] w-full h-full bg-background-darker">
+        <h3 className="flex gap-1 text-lg items-center font-bold justify-center py-3.5 w-full bg-card">
           <IoChatbubblesOutline />
           Chat Rooms
         </h3>
         <ChatRooms />
+        <div className="flex mt-auto w-full p-4 justify-between bg-card">
+          <UserButton afterSignOutUrl="/signIn" />
+          <ThemeSwitcher />
+        </div>
       </div>
       <Chat serverMessages={messages} userId={user.id} />
     </div>

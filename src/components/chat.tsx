@@ -19,8 +19,8 @@ const Chat = (props: Props) => {
   const ulRef = useScrollToBottom(messages);
 
   return (
-    <div className="flex max-w-[800px] w-full">
-      <div className="flex flex-col justify-end items-start max-h-[700px] border rounded-md h-screen w-full">
+    <div className="flex w-full">
+      <div className="flex flex-col justify-end items-start h-screen w-full">
         <ul
           className="flex flex-col h-full gap-2.5 w-full p-2 overflow-y-auto"
           ref={ulRef}

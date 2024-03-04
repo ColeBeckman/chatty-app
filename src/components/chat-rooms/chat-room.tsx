@@ -8,7 +8,7 @@ interface Props {
 const ChatRoom = (props: Props) => {
   const { room } = props;
   return (
-    <li className="flex items-center">
+    <li className="flex text-lg justify-center items-center">
       <LuDoorClosed className="ml-1" />
       <Link className="ml-1" href={`/${room.room_name}`}>
         {room.room_name}

@@ -3,18 +3,18 @@
 @tailwind utilities;
 
 ::-webkit-scrollbar {
-  width: 12px; /* width of the entire scrollbar */
+  width: 8px; /* width of the entire scrollbar */
 }
 
 ::-webkit-scrollbar-track {
-  background: orange; /* color of the tracking area */
+  background: transparent; /* color of the tracking area */
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: hsl(30 14% 60%); /* color of the scroll thumb */
   border-radius: 20px; /* roundness of the scroll thumb */
-  border: 3px solid orange; /* creates padding around scroll thumb */
+  border: transparent; /* creates padding around scroll thumb */
 }
 @layer base {
   :root {

@@ -20,19 +20,28 @@ const io = new Server(httpServer, {
 io.on('connection', async (socket) => {
   console.log(`${socket.id} connected`);
 
-  socket.on('authenticate', async (token) => {
+  socket.on('authenticate', async (token, callback) => {
     try {
       const decoded = jwt.verify(token, publicKey);
       const user = await clerkClient.users.getUser(decoded.sub);
       socket.user = user;
+      callback();
     } catch (err) {
       console.log(`${err}, Unauthorized user`);
     }
   });
 
-  socket.on('join', (roomName) => {
+  socket.on('join', (roomName, callBack) => {
     socket.join(roomName);
     socket.currentRoomName = roomName;
+    const clientsInRoom = io.sockets.adapter.rooms.get(roomName);
+    if (clientsInRoom) {
+      const socketUsers = [...clientsInRoom].map((socketId) => {
+        return io.sockets.sockets.get(socketId)?.user;
+      });
+      callBack(socketUsers);
+      console.log('Users in room:', socketUsers);
+    }
     console.log('joining', roomName);
   });
 

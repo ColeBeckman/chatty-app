@@ -3,6 +3,7 @@ import { usePathname } from 'next/navigation';
 import useChatroom from '@/hooks/use-chatroom';
 import useScrollToBottom from '@/hooks/scroll-to-bottom';
 
+import ActiveUsers from '@/components/active-users/active-users';
 import Bubble from '@/components/ui/bubble';
 import ChatForm from './chat-form/chat-form';
 
@@ -14,12 +15,17 @@ const Chat = (props: Props) => {
   const { serverMessages, userId } = props;
   const pathName = usePathname();
   const roomName = pathName.split('/')[1];
-  const { messages, sendMessage, currentMessage, setCurrentMessage } =
-    useChatroom(serverMessages, roomName);
+  const {
+    messages,
+    sendMessage,
+    currentMessage,
+    setCurrentMessage,
+    connectedUsers,
+  } = useChatroom(serverMessages, roomName);
   const ulRef = useScrollToBottom(messages);
   return (
-    <div className="flex w-full">
-      <div className="flex flex-col justify-end items-start h-screen w-full">
+    <div className="flex w-full h-full">
+      <div className="flex flex-col justify-end items-start h-full w-full">
         <ul
           className="flex flex-col-reverse h-full gap-2.5 w-full p-2 overflow-y-auto"
           ref={ulRef}
@@ -42,6 +48,9 @@ const Chat = (props: Props) => {
           currentMessage={currentMessage}
           setCurrentMessage={setCurrentMessage}
         />
+      </div>
+      <div className="flex flex-col items-center max-w-[180px] w-full h-full bg-background-darker">
+        <ActiveUsers connectedUsers={connectedUsers} />
       </div>
     </div>
   );

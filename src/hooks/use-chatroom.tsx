@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useAuth } from '@clerk/nextjs';
+import { User } from '@clerk/nextjs/server';
 
 type Message = {
   id: number;
@@ -17,6 +18,7 @@ let socket: Socket;
 function useChatroom(defaultMessages: [], roomName: string) {
   const [currentMessage, setCurrentMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>(defaultMessages);
+  const [connectedUsers, setConnectedUsers] = useState<User[]>([]);
   const { getToken } = useAuth();
 
   useEffect(() => {
@@ -26,17 +28,19 @@ function useChatroom(defaultMessages: [], roomName: string) {
 
     if (socket) {
       socket.on('newMessage', (message) => {
-        setMessages((prevMessages) => [...prevMessages, message]);
+        setMessages((prevMessages) => [message, ...prevMessages]);
       });
     }
 
     const authenticateUser = async () => {
       const token = await getToken();
-      socket.emit('authenticate', token);
+      socket.emit('authenticate', token, () => {
+        socket.emit('join', roomName, (socketUsers: User[]) => {
+          setConnectedUsers(socketUsers);
+        });
+      });
     };
     authenticateUser();
-
-    socket.emit('join', roomName);
 
     return () => {
       socket.emit('leave', roomName);
@@ -53,6 +57,7 @@ function useChatroom(defaultMessages: [], roomName: string) {
     sendMessage,
     currentMessage,
     setCurrentMessage,
+    connectedUsers,
   };
 }
 

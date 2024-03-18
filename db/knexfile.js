@@ -4,13 +4,7 @@ require('dotenv').config({ path: '../.env' });
 module.exports = {
   development: {
     client: 'postgresql',
-    connection: {
-      ssl: process.env.SSL === 'true',
-      database: process.env.POSTGRES_DATABASE,
-      user: process.env.POSTGRES_USER,
-      host: process.env.POSTGRES_HOST,
-      password: process.env.POSTGRES_PASSWORD,
-    },
+    connection: process.env.POSTGRES_URL,
     pool: {
       min: 2,
       max: 10,

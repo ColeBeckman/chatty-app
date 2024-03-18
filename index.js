@@ -26,9 +26,7 @@ io.on('connection', async (socket) => {
       const user = await clerkClient.users.getUser(decoded.sub);
       socket.user = user;
       callback();
-    } catch (err) {
-      console.log(`${err}, Unauthorized user`);
-    }
+    } catch (err) {}
   });
 
   socket.on('join', (roomName, callBack) => {
@@ -40,15 +38,12 @@ io.on('connection', async (socket) => {
         return io.sockets.sockets.get(socketId)?.user;
       });
       callBack(socketUsers);
-      console.log('Users in room:', socketUsers);
     }
-    console.log('joining', roomName);
   });
 
   socket.on('leave', (roomName) => {
     socket.leave(roomName);
     socket.currentRoomName = null;
-    console.log('leaving', roomName);
   });
 
   socket.on('message', async (newMessage) => {
